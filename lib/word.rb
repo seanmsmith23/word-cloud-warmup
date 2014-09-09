@@ -7,7 +7,7 @@ def parse(filepath)
   JSON.parse(text)
 end
 
-def array_of_words(hash)
+def words_into_array(hash)
   output = {}
   hash.each do |key, value|
     words = []
@@ -21,14 +21,12 @@ def array_of_words(hash)
   output
 end
 
-def giant_array(hash)
+def all_words(hash)
   words = []
-  names = []
-  hash.each do |key, value|
+  hash.map do |key, value|
     words << value
-    names << key
   end
-  {words: words.flatten, names: names.flatten}
+  words.flatten
 end
 
 def count_words(all_words)
@@ -42,7 +40,7 @@ def count_words(all_words)
   output
 end
 
-def add_names(counted, which_words)
+def associate_names_and_words(counted, which_words)
   final = counted
   which_words.each do |key, value|
     value.each do |word|
@@ -58,10 +56,10 @@ end
 
 def word_cloud_output(filepath)
   parsed = parse(filepath)
-  words_as_array = array_of_words(parsed)
-  master_list_words = giant_array(words_as_array)
-  counted = count_words(master_list_words[:words])
-  add_names(counted, words_as_array)
+  words_as_array = words_into_array(parsed)
+  master_list_words = all_words(words_as_array)
+  counted = count_words(master_list_words)
+  associate_names_and_words(counted, words_as_array)
 end
 
 ap word_cloud_output('/Users/seansmith/gSchoolWork/warmups/word-cloud/data/quotes.json')
